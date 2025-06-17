@@ -39,11 +39,9 @@ for dataset_source in dataset_sources:
     if dataset_source == "bvcm_automatic_transcripts":
         number_of_conversations = 26
         conversations = range(-1, number_of_conversations)  # -1 means all conversations
-        conversations = range(-1, 0)
     elif dataset_source == "bvcm_verrijkt_transcripts":
         number_of_conversations = 269
         conversations = range(-1, number_of_conversations, 10)  # -1 means all conversations, step 10 for performance
-        conversations = range(-1, 0)  # For testing purposes, only process the first conversation
     
     # Load conversation transcripts
     transcripts = pd.read_feather(f"{dataset_source}.feather")
@@ -64,7 +62,7 @@ for dataset_source in dataset_sources:
             transcripts.drop(transcripts[transcripts["transcript_id"] != conversation].index, inplace=True)
             transcripts.reset_index(drop=True, inplace=True)
         elif conversation == -1 and dataset_source == "bvcm_verrijkt_transcripts": # When the source is enriched transcripts, remove conversations that are not in the range
-            #transcripts.drop(transcripts[~transcripts["transcript_id"].isin(conversations)].index, inplace=True)
+            transcripts.drop(transcripts[~transcripts["transcript_id"].isin(conversations)].index, inplace=True)
             transcripts.reset_index(drop=True, inplace=True)
 
         # Analyze and map
